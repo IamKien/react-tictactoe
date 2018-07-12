@@ -1,5 +1,6 @@
 import React from 'react';
 import Board from '../board/Board';
+import Square from '../square/Square';
 import '../board/Board.css';
 
 class Game extends React.Component {
@@ -12,7 +13,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xTurn: true,
-
+      
     };
 
     this.calculateWinner = this.calculateWinner.bind(this);
@@ -40,6 +41,24 @@ class Game extends React.Component {
     return null;
   }
 
+ 
+  getLocation = (move) => {
+  const locationMap = {
+      0: 'row: 1, col: 1',
+      1: 'row: 1, col: 2',
+      2: 'row: 1, col: 3',
+      3: 'row: 2, col: 1',
+      4: 'row: 2, col: 2',
+      5: 'row: 2, col: 3',
+      6: 'row: 3, col: 1',
+      7: 'row: 3, col: 2',
+      8: 'row: 3, col: 3',
+    };
+
+    return locationMap[move];
+  };
+
+
 
   handleClick(i){
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -48,17 +67,18 @@ class Game extends React.Component {
     
     
   
-
-    if(this.calculateWinner(squares || squares[i])) {
+    if(this.calculateWinner(squares) || squares[i]) {
       return;
     }
-    squares[i] = this.state.xTurn ? "X" : "O";
+    squares[i] = this.state.xTurn? "X" : "O";
     this.setState({
       history: history.concat([{
-        squares: squares
+        squares: squares,
+        currentLocation: this.getLocation(i),
       }]),
       xTurn: !this.state.xTurn,
       stepNumber: history.length,
+    
     });
   }
 
@@ -74,17 +94,22 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber];
     const winner = this.calculateWinner(current.squares);
 
+
   
-
-
-
     const moves = history.map((step, move) => {
-      const desc = move?
-        'Go to move #' + move:
-        'Go to game start';
+      const currentLocation = step.currentLocation? `(${step.currentLocation})` : '';
+      const desc = move? 'Go to move #' + move: 'Go to game start';
+      const currentBold = move === this.state.stepNumber? "bold" : "";
+      
+
       return(
          <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button 
+          className={`${currentBold} button`}
+          onClick={() => this.jumpTo(move)
+          }>
+          {desc} {currentLocation}
+          </button>
         </li>
       )
     })
@@ -96,12 +121,17 @@ class Game extends React.Component {
       status = "Next player: " + (this.state.xTurn ? "X" : "O");
     }
 
+
     return(
       <div className="game">
         <div className="game-board">
           <Board 
           squares={current.squares}
           onClick={(i) => this.handleClick(i)}
+          />
+          <Square
+            history={this.state.newHistory}
+            stepNumber={this.state.newstepNumber}
           />
         </div>
         <div className="game-info">
@@ -139,3 +169,18 @@ export default Game;
 //   return null;
 // }
 
+// const getLocation = (move) => {
+//   const locationMap = {
+//     0: 'row: 1, col: 1',
+//     1: 'row: 1, col: 2',
+//     2: 'row: 1, col: 3',
+//     3: 'row: 2, col: 1',
+//     4: 'row: 2, col: 2',
+//     5: 'row: 2, col: 3',
+//     6: 'row: 3, col: 1',
+//     7: 'row: 3, col: 2',
+//     8: 'row: 3, col: 3',
+//   };
+
+//   return locationMap[move];
+// };
