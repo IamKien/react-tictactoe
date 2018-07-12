@@ -21,3 +21,15 @@
   font-size: 25px;
 }
 
+
+
+.kbd-navigation .square:focus {
+  background: #ddd;
+}
+
+
+
+.game-info {
+  margin-left: 20px;
+}
+
