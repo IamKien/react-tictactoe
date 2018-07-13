@@ -4,33 +4,30 @@ import '../game/Game';
 
 
 
-class Square extends React.Component {
+function Square(props){
 
-  render(){
-    const newHistory = this.props.history;
-    const newstepNumber = this.props.stepNumber;
-
-    let squareBold;
-
-    const newMoves = newHistory.map((step, move) => {
-      const squareBold = move === this.props.newstepNumber? "box bold" : "box";
-
-    
-
-    })
+  if(props.winner){
+    return (
+      <div 
+      className="square " 
+      onClick={() => props.onClick()}
+      >
+          {props.value}
+      </div>
+    )
+  } else{
 
    return (
-      <button className={`${squareBold} button`} 
-      onClick={this.props.onClick}
+      <div 
+      className="square" 
+      onClick={() => props.onClick()}
       >
-        {this.props.value}
-      </button>
-    );
-
-
-    
+          {props.value}
+      </div>
+    );  
+   }  
  }
-}
+
 
 export default Square;
 

@@ -2,39 +2,46 @@ import React from 'react';
 import Square from '../square/Square';
 import './Board.css';
 
-class Board extends React.Component{
+class Board extends React.Component {
+  createBoard(row, col){
+    const board = [];
+    let cellCounter = 0;
 
-
-  renderSquare(i){
-    return(
-      <Square
-        value = {this.props.squares[i]}
-        onClick = {() => this.props.onClick(i)}
-      />  
-    );
+    for (let i = 0; i < row; i += 1) {
+      const columns = [];
+      for (let j = 0; j < col; j += 1) {
+        columns.push(this.renderSquare(cellCounter++));
+      }
+      board.push(
+        <div key={i} className="container" >
+          {columns}
+        </div> );
+    }
+    return board;
   }
 
-  render(){
-    
+  renderSquare(i){
+
     return(
-      <div>
-        <div className="container">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
       
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-      
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
+        <Square 
+          value={this.props.squares[i]}
+          onClick={() => this.props.onClick(i)}
+        />
+     
+    )
+  }
+
+  
+  render() {
+    return (
+    
+        <div>
+          {this.createBoard(3, 3)}
         </div>
-      </div>
-      
     )
   }
 }
+
 
 export default Board;

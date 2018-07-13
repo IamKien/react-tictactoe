@@ -13,6 +13,8 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xTurn: true,
+      isSorted: false,
+   
       
     };
 
@@ -42,6 +44,7 @@ class Game extends React.Component {
   }
 
  
+ 
   getLocation = (move) => {
   const locationMap = {
       0: 'row: 1, col: 1',
@@ -60,17 +63,17 @@ class Game extends React.Component {
 
 
 
+
   handleClick(i){
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     
-    
-  
     if(this.calculateWinner(squares) || squares[i]) {
       return;
     }
     squares[i] = this.state.xTurn? "X" : "O";
+
     this.setState({
       history: history.concat([{
         squares: squares,
@@ -78,7 +81,7 @@ class Game extends React.Component {
       }]),
       xTurn: !this.state.xTurn,
       stepNumber: history.length,
-    
+
     });
   }
 
@@ -89,11 +92,17 @@ class Game extends React.Component {
     });
   }
 
+  sortMove(){
+    this.setState({
+      isSorted: !this.state.isSorted,
+    })
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = this.calculateWinner(current.squares);
-
+   
 
   
     const moves = history.map((step, move) => {
@@ -117,7 +126,9 @@ class Game extends React.Component {
     let status;
     if(winner){
       status = "Winner: " + winner;
-    } else{
+    } else if(this.state.stepNumber === 9)
+      status = "It's a tie";
+    else{
       status = "Next player: " + (this.state.xTurn ? "X" : "O");
     }
 
@@ -129,14 +140,16 @@ class Game extends React.Component {
           squares={current.squares}
           onClick={(i) => this.handleClick(i)}
           />
-          <Square
-            history={this.state.newHistory}
-            stepNumber={this.state.newstepNumber}
-          />
+          
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <button className="button" 
+            onClick={() => this.sortMove()}
+          >
+            Sort moves
+          </button>
+          <ol>{ this.state.isSorted? moves: moves.reverse()}</ol>
         </div>
       </div>
     )
