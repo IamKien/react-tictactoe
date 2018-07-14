@@ -21,12 +21,18 @@ class Board extends React.Component {
   }
 
   renderSquare(i){
+    let won = false;
+
+    if(this.props.winningPos && this.props.winningPos.indexOf(i) >= 0){
+      won = true;
+    }
 
     return(
       
         <Square 
           value={this.props.squares[i]}
           onClick={() => this.props.onClick(i)}
+          highlight={won}
         />
      
     )

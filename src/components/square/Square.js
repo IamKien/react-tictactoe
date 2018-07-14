@@ -6,10 +6,11 @@ import '../game/Game';
 
 function Square(props){
 
-  if(props.winner){
+  if(props.highlight){
     return (
       <div 
       className="square " 
+      style={{color: "red"}}
       onClick={() => props.onClick()}
       >
           {props.value}
